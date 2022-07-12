@@ -59,7 +59,13 @@ const game = () => {
     let playerscore = 0;
     let computerscore = 0;
     for (let i=0; i<5; i++) {
-        let playerSelection = prompt("Rock, Paper, or Scissors");
+
+        let playerSelection;
+        while (playerSelection != "rock" && playerSelection != "paper" && playerSelection != "scissors") {
+            playerSelection = prompt("Rock, Paper, or Scissors");
+            playerSelection = playerSelection.toLowerCase();
+        }
+
         let computerSelection = computerPlay();
         let playerWin = playRound(playerSelection, computerSelection);
         if (playerWin == 0)
@@ -67,6 +73,7 @@ const game = () => {
         else if (playerWin == 1)
             computerscore++;
     }
+    
     if (playerscore > computerscore)
         console.log(`You won ${playerscore} to ${computerscore}`);
     else if (playerscore < computerscore)
