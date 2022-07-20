@@ -1,5 +1,10 @@
 "use strict";
 
+const $ = selector => document.querySelector(selector);
+
+let playerScore = 0;
+let computerScore = 0;
+
 const computerPlay = () => {
     let number = Math.floor(Math.random() * 3);
     if (number == 0)
@@ -13,73 +18,86 @@ const computerPlay = () => {
 const playRound = (playerSelection, computerSelection) => {
     if (playerSelection == "rock") {
         if (computerSelection == "rock") {
-            alert("You Tied!");
+            $("#roundWin").textContent = "You Tied!";
             return null;
         }
         else if (computerSelection == "paper") {
-            alert("You Lose! Paper beats Rock");
+            $("#roundWin").textContent = "You Lose! Paper beats Rock";
             return 1;
         }
         else if (computerSelection == "scissors") {
-            alert("You Win! Rock beats Scissors");
+            $("#roundWin").textContent = "You Win! Rock beats Scissors";
             return 0;
         }
     }
     if (playerSelection == "paper") {
         if (computerSelection == "rock") {
-            alert("You Win! Paper beats Rock");
+            $("#roundWin").textContent = "You Win! Paper beats Rock";
             return 0;
         }
         else if (computerSelection == "paper") {
-            alert("You Tied!");
+            $("#roundWin").textContent = "You Tied!";
             return null;
         }
         else if (computerSelection == "scissors") {
-            alert("You Lose! Scissors beats Paper");
+            $("#roundWin").textContent = "You Lose! Scissors beats Paper";
             return 1;
         }
     }
     if (playerSelection == "scissors") {
         if (computerSelection == "rock") {
-            alert("You Lose! Rock beats Scissors");
+            $("#roundWin").textContent = "You Lose! Rock beats Scissors";
             return 1;
         }
         else if (computerSelection == "paper") {
-            alert("You Win! Scissors beats Paper");
+            $("#roundWin").textContent = "You Win! Scissors beats Paper";
             return 0;
         }
         else if (computerSelection == "scissors") {
-            alert("You Tied!");
+            $("#roundWin").textContent = "You Tied!";
             return null;
         }
     }
 }
 
-const game = () => {
-    let playerscore = 0;
-    let computerscore = 0;
-    for (let i=0; i<5; i++) {
-
-        let playerSelection;
-        while (playerSelection != "rock" && playerSelection != "paper" && playerSelection != "scissors") {
-            playerSelection = prompt("Rock, Paper, or Scissors");
-            playerSelection = playerSelection.toLowerCase();
-        }
-
-        let computerSelection = computerPlay();
-        let playerWin = playRound(playerSelection, computerSelection);
-        if (playerWin == 0)
-            playerscore++;
-        else if (playerWin == 1)
-            computerscore++;
-    }
-    
-    if (playerscore > computerscore)
-        console.log(`You won ${playerscore} to ${computerscore}`);
-    else if (playerscore < computerscore)
-        console.log(`You lost ${computerscore} to ${playerscore}`);
-    else
-        console.log("You tied with the computer")
+const resetGame = () => {
+    $("#playerScore").textContent = 0;
+    $("#computerScore").textContent = 0;
+    playerScore = 0;
+    computerScore = 0;
 }
 
-game();
+const game = (playerSelection) => {
+    let computerSelection = computerPlay();
+    let playerWin = playRound(playerSelection, computerSelection);
+    if (playerWin == 0) {
+        playerScore++;
+        $("#playerScore").textContent = `${playerScore}`;
+    }
+    else if (playerWin == 1) {
+        computerScore++;
+        $("#computerScore").textContent = `${computerScore}`;
+    }
+
+    if (computerScore >= 5) {
+        resetGame();
+        $("#gameWin").textContent = "the computer won the match";
+    }
+    if (playerScore >= 5) {
+        resetGame();
+        $("#gameWin").textContent = "you won the match";
+    }
+}
+
+
+$("#rock").addEventListener("click", () => {
+    game("rock");
+});
+
+$("#paper").addEventListener("click", () => {
+    game("paper");
+});
+
+$("#scissors").addEventListener("click", () => {
+    game("scissors");
+});
